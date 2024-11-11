@@ -1,33 +1,48 @@
-//Drop existing Tables
-drop table user;
-drop table trainer;
-drop table tranierPhone;
-drop table goal;
-drop table log;
-drop table exerise;
-drop table workout;
-drop table reach;
+/*
+    Create Sequences
+*/
 
-//Create Tables
+//trainer sequence
+CREATE Sequence trainerIDSeq
+START WITH 1
+INCREMENT BY 1
+MAXVALUE 100;
+
+//goal sequence
+CREATE Sequence goalIDSeq
+START WITH 1
+INCREMENT BY 1
+MAXVALUE 100;
+
+/*
+    Create Tables
+*/
+
+//Goal table
 CREATE TABLE Goal(
 goalID int PRIMARY KEY,
 goal varChar(100),
 startDate DATE,
 endDate DATE);
 
-CREATE TABLE Log(
+//log table
+CREATE TABLE LogTable(
 logNumber int PRIMARY KEY,
 logDay DATE,
 Carloies INT,
-startTime TIME,
-endTime TIME);
+startTime INT,
+endTime INT);
 
+Alter TABLE logTable
+ADD CONSTRAINT checkTimes CHECK (endTime > startTime);
+
+//exercise table
 CREATE TABLE Exercise(
-exceriseName varChar(50),
+exerciseName varChar(50) PRIMARY KEY,
 equipment varChar(50),
-repWeight int,
 type varChar(50));
 
+//trainer table
 CREATE TABLE Trainer (
 trainerID INT PRIMARY KEY, 
 fName varChar(25), 
@@ -36,31 +51,96 @@ gender varchar(1),
 email varchar(100), 
 rating INT);
 
-CREATE TABLE User(
+//user table
+CREATE TABLE UserTable(
 username varchar(25) PRIMARY KEY, 
 email varchar(100), 
 weight INT, 
 fName varchar(50), 
 gender varchar(1), 
 trainerID INT, 
-logNumber varchar(3),
+logNumber INT,
 FOREIGN KEY (trainerID) REFERENCES Trainer (trainerID),
-FOREIGN KEY (logNumber) REFERENCES Log (logNumber));
+FOREIGN KEY (logNumber) REFERENCES logTable (logNumber));
 
+//since each trainer has more than 1 phone number, we need an extra table
 CREATE TABLE TrainerPhone(
-trainerID INT PRIMARY KEY,
-Phone INT PRIMARY KEY,
+trainerID INT,
+Phone INT,
+PRIMARY KEY (trainerID, Phone),
 FOREIGN KEY (trainerID) REFERENCES Trainer (trainerID) ON DELETE CASCADE);
 
+//connects a user with an excerise
 CREATE TABLE Workout(
-username varchar(50),
-exceriseName varchar(50),
-FOREIGN KEY (username) REFERENCES user (username) ON DELETE CASCADE,
-FOREIGN KEY (exceriseName) REFERENCES Excerise (exceriseName) ON DELETE CASCADE);
+username varchar(25),
+repWeight int,
+exerciseName varchar(50),
+FOREIGN KEY (username) REFERENCES UserTable (username) ON DELETE CASCADE,
+FOREIGN KEY (exerciseName) REFERENCES Exercise (exerciseName) ON DELETE CASCADE);
 
+//checks to see if a user completed their goals
 CREATE TABLE Reach(
 completed varchar(1),
 username varchar(50),
-goal varchar(100),
-FOREIGN KEY (username) REFERENCES user (userName) ON DELETE CASCADE,
-FOREIGN KEY (goal) REFERENCES goal (goal) ON DELETE CASCADE);
+goalID INT,
+FOREIGN KEY (username) REFERENCES userTable (userName) ON DELETE CASCADE,
+FOREIGN KEY (goalID) REFERENCES goal (goalID) ON DELETE CASCADE);
+
+/*
+    create trigers
+*/
+
+//sets the trainer id for eeach trainer
+CREATE TRIGGER setTrainerID
+BEFORE INSERT ON TRAINER
+FOR EACH ROW
+BEGIN
+    IF :NEW.trainerID IS NULL THEN
+        :NEW.trainerID := trainerIDSeq.NEXTVAL;
+    End IF;
+END;
+/
+
+//sets each goalID
+CREATE TRIGGER setGoalID
+BEFORE INSERT ON GOAL
+FOR EACH ROW
+BEGIN
+    IF :NEW.goalID IS NULL THEN
+        :NEW.goalID := goalIDSeq.NEXTVAL;
+    End IF;
+END;
+/
+
+//makes sure each user has a trainer
+CREATE TRIGGER EnsureUserHasTrainer
+BEFORE INSERT ON userTable
+FOR EACH ROW
+BEGIN
+    IF :NEW.trainerID IS NULL THEN
+        RAISE_APPLICATION_ERROR(-20001, 'You must have a trainer');
+    END IF;
+END;
+/
+
+/*
+    Create View
+*/
+
+//View for trainer to access the name, email and rating
+CREATE VIEW trainerInfo AS
+SELECT 
+fname,
+email,
+rating
+FROM trainer;
+
+/*
+    Create Indexs
+*/
+
+//Create index for the user table on email
+CREATE INDEX userEmailIndex ON userTable(email);
+
+//Create index for the trainer table on email
+CREATE INDEX trainerEmailIndex ON Trainer(email);
