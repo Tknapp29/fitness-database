@@ -15,6 +15,11 @@ START WITH 1
 INCREMENT BY 1
 MAXVALUE 100;
 
+CREATE Sequence logNumberSeq
+START WITH 1
+INCREMENT BY 1
+MAXVALUE 1000;
+
 /*
     Create Tables
 */
@@ -26,22 +31,11 @@ goal varChar(100),
 startDate DATE,
 endDate DATE);
 
-//log table
-CREATE TABLE LogTable(
-logNumber int PRIMARY KEY,
-logDay DATE,
-Carloies INT,
-startTime INT,
-endTime INT);
-
-Alter TABLE logTable
-ADD CONSTRAINT checkTimes CHECK (endTime > startTime);
-
 //exercise table
 CREATE TABLE Exercise(
 exerciseName varChar(50) PRIMARY KEY,
 equipment varChar(50),
-type varChar(50));
+exceriseType varChar(50));
 
 //trainer table
 CREATE TABLE Trainer (
@@ -69,6 +63,19 @@ Phone INT,
 PRIMARY KEY (trainerID, Phone),
 FOREIGN KEY (trainerID) REFERENCES Trainer (trainerID) ON DELETE CASCADE);
 
+//log table
+CREATE TABLE LogTable(
+logNumber int PRIMARY KEY,
+Carloies INT,
+startTime TIMESTAMP,
+endTime TIMESTAMP,
+username varchar(25),
+FOREIGN KEY (username) REFERENCES UserTable (username) ON DELETE CASCADE);
+
+Alter TABLE logTable
+ADD CONSTRAINT checkTimes CHECK (endTime > startTime);
+
+
 //connects a user with an excerise
 CREATE TABLE Workout(
 username varchar(25),
@@ -84,12 +91,6 @@ username varchar(50),
 goalID INT,
 FOREIGN KEY (username) REFERENCES userTable (userName) ON DELETE CASCADE,
 FOREIGN KEY (goalID) REFERENCES goal (goalID) ON DELETE CASCADE);
-
-CREATE TABLE logEntry(
-logNumber INT,
-username varchar(50),
-FOREIGN KEY (logNumber) REFERENCES logTable (logNumber) ON DELETE CASCADE,
-FOREIGN KEY (username) REFERENCES userTable (username) ON DELETE CASCADE);
 
 /*
     create trigers
@@ -113,6 +114,17 @@ FOR EACH ROW
 BEGIN
     IF :NEW.goalID IS NULL THEN
         :NEW.goalID := goalIDSeq.NEXTVAL;
+    End IF;
+END;
+/
+
+//sets the logID for each log
+CREATE TRIGGER setlogNumber
+BEFORE INSERT ON LogTable
+FOR EACH ROW
+BEGIN
+    IF :NEW.logNumber IS NULL THEN
+        :NEW.logNumber := logNumberSeq.NEXTVAL;
     End IF;
 END;
 /

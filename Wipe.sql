@@ -1,11 +1,5 @@
 --Wipe database
 /*
-    Drop checks
-*/
-ALTER table Goal
-DROP constraint checkTimes;
-
-/*
     Drop tables
 */
 drop table userTable cascade constraints;
@@ -17,7 +11,6 @@ drop table exercise cascade constraints;
 drop table workout cascade constraints;
 drop table reach cascade constraints;
 drop table TrainerPhone cascade constraints;
-drop table logEntry cascade constraints;
 
 /*
     Drop Triggers
@@ -25,6 +18,7 @@ drop table logEntry cascade constraints;
 
 drop trigger setTrainerID;
 drop trigger setGoalID;
+drop trigger setLogNumber;
 drop trigger ensureUserHasTrainer;
 
 /*
@@ -33,6 +27,7 @@ drop trigger ensureUserHasTrainer;
 
 drop sequence trainerIDSeq;
 drop sequence goalIDseq;
+drop sequence logNumberSeq;
 
 /*
     Drop Views
