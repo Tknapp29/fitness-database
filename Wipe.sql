@@ -1,3 +1,4 @@
+--Wipe database
 /*
     Drop checks
 */
@@ -5,7 +6,7 @@ ALTER table Goal
 DROP constraint checkTimes;
 
 /*
-    Drop any existing tables, or wipe database 
+    Drop tables
 */
 drop table userTable cascade constraints;
 drop table trainer cascade constraints;
@@ -16,6 +17,7 @@ drop table exercise cascade constraints;
 drop table workout cascade constraints;
 drop table reach cascade constraints;
 drop table TrainerPhone cascade constraints;
+drop table logEntry cascade constraints;
 
 /*
     Drop Triggers

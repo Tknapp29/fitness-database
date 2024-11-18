@@ -1,3 +1,4 @@
+--Create Database
 /*
     Create Sequences
 */
@@ -59,9 +60,7 @@ weight INT,
 fName varchar(50), 
 gender varchar(1), 
 trainerID INT, 
-logNumber INT,
-FOREIGN KEY (trainerID) REFERENCES Trainer (trainerID),
-FOREIGN KEY (logNumber) REFERENCES logTable (logNumber));
+FOREIGN KEY (trainerID) REFERENCES Trainer (trainerID));
 
 //since each trainer has more than 1 phone number, we need an extra table
 CREATE TABLE TrainerPhone(
@@ -85,6 +84,12 @@ username varchar(50),
 goalID INT,
 FOREIGN KEY (username) REFERENCES userTable (userName) ON DELETE CASCADE,
 FOREIGN KEY (goalID) REFERENCES goal (goalID) ON DELETE CASCADE);
+
+CREATE TABLE logEntry(
+logNumber INT,
+username varchar(50),
+FOREIGN KEY (logNumber) REFERENCES logTable (logNumber) ON DELETE CASCADE,
+FOREIGN KEY (username) REFERENCES userTable (username) ON DELETE CASCADE);
 
 /*
     create trigers
