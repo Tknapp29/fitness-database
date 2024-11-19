@@ -1,28 +1,24 @@
---Create Database
 /*
-    Create Sequences
+    Create database
 */
 
-//trainer sequence
+//trainer ID sequence
 CREATE Sequence trainerIDSeq
 START WITH 1
 INCREMENT BY 1
 MAXVALUE 100;
 
-//goal sequence
+//goal number sequence
 CREATE Sequence goalIDSeq
 START WITH 1
 INCREMENT BY 1
 MAXVALUE 100;
 
+//log number sequence  
 CREATE Sequence logNumberSeq
 START WITH 1
 INCREMENT BY 1
 MAXVALUE 1000;
-
-/*
-    Create Tables
-*/
 
 //Goal table
 CREATE TABLE Goal(
@@ -35,38 +31,38 @@ endDate DATE);
 CREATE TABLE Exercise(
 exerciseName varChar(50) PRIMARY KEY,
 equipment varChar(50),
-exceriseType varChar(50));
+exerciseType varChar(50));
 
 //trainer table
 CREATE TABLE Trainer (
-trainerID INT PRIMARY KEY, 
+trainerID int PRIMARY KEY, 
 fName varChar(25), 
-age INT,
+age int,
 gender varchar(1), 
 email varchar(100), 
-rating INT);
+rating int);
 
 //user table
 CREATE TABLE UserTable(
 username varchar(25) PRIMARY KEY, 
 email varchar(100), 
-weight INT, 
+weight int, 
 fName varchar(50), 
 gender varchar(1), 
-trainerID INT, 
+trainerID int, 
 FOREIGN KEY (trainerID) REFERENCES Trainer (trainerID));
 
-//since each trainer has more than 1 phone number, we need an extra table
+//trainer phone number table
 CREATE TABLE TrainerPhone(
-trainerID INT,
-Phone INT,
+trainerID int,
+Phone varchar(18),
 PRIMARY KEY (trainerID, Phone),
 FOREIGN KEY (trainerID) REFERENCES Trainer (trainerID) ON DELETE CASCADE);
 
 //log table
 CREATE TABLE LogTable(
 logNumber int PRIMARY KEY,
-Carloies INT,
+Calories int,
 startTime TIMESTAMP,
 endTime TIMESTAMP,
 username varchar(25),
@@ -74,7 +70,6 @@ FOREIGN KEY (username) REFERENCES UserTable (username) ON DELETE CASCADE);
 
 Alter TABLE logTable
 ADD CONSTRAINT checkTimes CHECK (endTime > startTime);
-
 
 //connects a user with an excerise
 CREATE TABLE Workout(
@@ -84,17 +79,13 @@ exerciseName varchar(50),
 FOREIGN KEY (username) REFERENCES UserTable (username) ON DELETE CASCADE,
 FOREIGN KEY (exerciseName) REFERENCES Exercise (exerciseName) ON DELETE CASCADE);
 
-//checks to see if a user completed their goals
+//connects a user with a goal they reached
 CREATE TABLE Reach(
-completed varchar(1),
+completed DATE,
 username varchar(50),
-goalID INT,
-FOREIGN KEY (username) REFERENCES userTable (userName) ON DELETE CASCADE,
+goalID int,
+FOREIGN KEY (username) REFERENCES userTable (username) ON DELETE CASCADE,
 FOREIGN KEY (goalID) REFERENCES goal (goalID) ON DELETE CASCADE);
-
-/*
-    create trigers
-*/
 
 //sets the trainer id for eeach trainer
 CREATE TRIGGER setTrainerID
@@ -140,10 +131,6 @@ BEGIN
 END;
 /
 
-/*
-    Create View
-*/
-
 //View for trainer to access the name, email and rating
 CREATE VIEW trainerInfo AS
 SELECT 
@@ -152,12 +139,10 @@ email,
 rating
 FROM trainer;
 
-/*
-    Create Indexs
-*/
-
 //Create index for the user table on email
 CREATE INDEX userEmailIndex ON userTable(email);
 
 //Create index for the trainer table on email
 CREATE INDEX trainerEmailIndex ON Trainer(email);
+
+Commit;
