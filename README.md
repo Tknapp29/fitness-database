@@ -1,8 +1,15 @@
-<h1>Fitness Database</h1>        
-This is a database in SQL that stores and manages information about users, trainers, fitness goals and exercises  
-<h2>Files</h2>  
-Database: Files that will create all the tables<br>
-View: Inserts sample data into the table and views them <br>
-Wipe: Wipes all data and tabales created<br>  
-SampleData: PDF file containing all the sample data<br>
-ERDiagram: PDF Entity relationship model diagram
+<h1>Fitness Database</h1>
+<h2>Overview</h2>
+This is a database that stores and manages information about users, trainers, fitness goals and exercises. I made this database because I love to excerise and go to the gym regularly. The goal of this project is to inform and educate users to maintain a healthy lifestyle. This project was made using SQL in Oracle. 
+<h2>Files</h2>
+<ul>
+<li>Database: Files that will create all the tables</li>
+<li>View: Inserts sample data into the table and views them</li>
+<li>Wipe: Wipes all data and tabales created</li>
+<li>SampleData: PDF file containing all the sample data</li>
+<li>ERDiagram: PDF Entity relationship model diagram</li>
+</ul>
+<h2>How to run</h2>
+1) Go to Oracle, and first run <code>wipe.sql</code> to override any existing databases with the same name<br>
+2) Run <code>database.sql</code> to create all the tables<br>
+3) Run <code>view.sql</code> to insert sample data into the tables and view them
