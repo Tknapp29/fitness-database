@@ -1,7 +1,8 @@
-# fitness-database     
-By Tyler Knapp   
-Database that stores and manages information about users, trainers, fitness goals and exercises  
-Database: Creates all the tables  
-View: View all tables and data  
-Wipe: Wipes all data created in database  
-SampleData: Contains sample data for the database  
+<h1>Fitness Database</h1>        
+This is a database in SQL that stores and manages information about users, trainers, fitness goals and exercises  
+<h2>Files</h2>  
+Database: Files that will create all the tables<br>
+View: Inserts sample data into the table and views them <br>
+Wipe: Wipes all data and tabales created<br>  
+SampleData: PDF file containing all the sample data<br>
+ERDiagram: PDF Entity relationship model diagram
