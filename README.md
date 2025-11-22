@@ -1,6 +1,6 @@
 <h1>Fitness Database</h1>
 <h2>Overview</h2>
-This is a database that stores and manages information about users, trainers, fitness goals and exercises. I made this database because I love to excerise and go to the gym regularly. The goal of this project is to inform and educate users to maintain a healthy lifestyle. This project was made using SQL in Oracle. 
+This is a database that was designed in Oracle that stores and manages information about users, trainers, fitness goals and exercises with a goal of helping users track workouts and goals. I created this project because I love to excerise and go to the gym regularly. I focused on creating a structure that made it easy to undestand user progress and excerise data. I learned how to improve queries and to make retrieving information faster and more efficient to support better insights into user habits and goal achievement.
 <h2>Files</h2>
 <ul>
 <li>Database: Files that will create all the tables</li>
